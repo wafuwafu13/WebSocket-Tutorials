@@ -6,7 +6,7 @@
 </head>
 <body>
     <script>
-        let sock = new WebSocket("wss://echo.websocket.org");
+        const sock = new WebSocket("ws://localhost:5001");
 
         sock.onopen = function(event) {
             alert('Socket connect successfully')
