@@ -27,16 +27,31 @@
     </div>
 
     <script>
+        const name = prompt('What is your name?');
+
         const sock = new WebSocket("ws://localhost:5001");
+
+        sock.onopen = function() {
+            sock.send(JSON.stringify({
+                type: 'name',
+                data: name,
+            }))
+        }
 
         sock.onmessage = function(event) {
             console.log(event)
-            log.innerHTML += event.data + "<br>"
+            const json = JSON.parse(event.data);
+            log.innerHTML += json.name + ": " + json.data + "<br>"
         }
 
         document.querySelector('button').onclick = function() {
             const text = document.getElementById('text').value;
-            sock.send(text);
+            // sock.send(text);
+            sock.send(JSON.stringify({
+                type: 'message',
+                data: text,
+            }))
+
             log.innerHTML += "You: " + text + "<br>"
         }
     </script>

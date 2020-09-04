@@ -3,11 +3,20 @@ const s = new server({ port: 5001 })
 
 s.on('connection', function(ws) {
     ws.on('message', function(message) {
-        console.log("Received: " + message);
+        
+        message = JSON.parse(message);
+
+        if (message.type == "name") {
+            ws.personName = message.data;
+            return;
+        }
 
         s.clients.forEach(function e(client) {
             if (client != ws) {
-                client.send(message);
+                client.send(JSON.stringify({
+                    name: ws.personName,
+                    data: message.data
+                }));
             }
         });
 
